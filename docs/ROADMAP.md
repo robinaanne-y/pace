@@ -24,12 +24,12 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for how the pieces fit together.
 
 Core functionality:
 
-- [ ] List projects
+- [x] List projects
 - [ ] View project
-- [ ] Create project
+- [x] Create project
 - [ ] Edit project
 - [ ] Delete project
-- [ ] Form validation
+- [x] Form validation
 - [x] API validation and error responses
 
 Project fields:
@@ -244,14 +244,14 @@ Build the visual foundation from the Figma design.
 
 Build the primary screen.
 
-- [ ] Fetch projects from API
-- [ ] Display projects
-- [ ] Display status
-- [ ] Display priority
-- [ ] Display dates
-- [ ] Loading state
-- [ ] Empty state
-- [ ] Error state
+- [x] Fetch projects from API
+- [x] Display projects
+- [x] Display status
+- [x] Display priority
+- [x] Display dates
+- [x] Loading state
+- [x] Empty state
+- [x] Error state
 
 Layout:
 
@@ -276,19 +276,19 @@ Get this screen working before adding bonus features.
 
 Build `/projects/create`.
 
-- [ ] Create reusable `ProjectForm`
-- [ ] Client name
-- [ ] Project name
-- [ ] Description
-- [ ] Status
-- [ ] Priority
-- [ ] Start date
-- [ ] Due date
-- [ ] Client-side validation
-- [ ] Submit to API
-- [ ] Handle API validation errors
-- [ ] Success notification
-- [ ] Redirect to project list
+- [x] Create reusable `ProjectForm`
+- [x] Client name
+- [x] Project name
+- [x] Description
+- [x] Status
+- [x] Priority
+- [x] Start date
+- [x] Due date
+- [x] Client-side validation
+- [x] Submit to API
+- [x] Handle API validation errors
+- [x] Success notification
+- [x] Redirect to project list
 
 ---
 
