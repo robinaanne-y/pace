@@ -13,7 +13,7 @@ class WebRoutesTest extends TestCase
     #[TestWith(['/projects/1/edit'])]
     public function test_application_urls_render_the_vue_shell(string $url): void
     {
-        $response = $this->get($url);
+        $response = $this->withoutVite()->get($url);
 
         $response->assertOk()->assertViewIs('app');
     }
