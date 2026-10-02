@@ -82,7 +82,7 @@ MySQL
 **Deliverable:** README and project architecture notes.
 
 - [x] [ARCHITECTURE.md](ARCHITECTURE.md)
-- [ ] README (see Phase 16)
+- [x] README (see Phase 16)
 
 ---
 
@@ -445,15 +445,15 @@ The backend must not trust frontend validation. Vue validation improves the expe
 
 Replace the default Laravel README with:
 
-- [ ] Short project description
-- [ ] Tech stack — Laravel, Vue, MySQL
-- [ ] Features — project CRUD, validation, search, filtering, sorting
-- [ ] Requirements — PHP, Composer, Node.js, MySQL
-- [ ] Installation — backend, frontend and database setup
-- [ ] Environment — `.env` configuration
-- [ ] Running the application
-- [ ] API endpoints (the table in Phase 3)
-- [ ] Testing — how to run the tests
+- [x] Short project description
+- [x] Tech stack — Laravel, Vue, MySQL
+- [x] Features — project CRUD, validation, search, filtering, sorting
+- [x] Requirements — PHP, Composer, Node.js, MySQL
+- [x] Installation — backend, frontend and database setup
+- [x] Environment — `.env` configuration
+- [x] Running the application
+- [x] API endpoints (the table in Phase 3)
+- [x] Testing — how to run the tests
 
 ---
 
