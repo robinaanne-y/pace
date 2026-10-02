@@ -58,6 +58,10 @@ function validate() {
 }
 
 async function submit() {
+    if (props.isSubmitting) {
+        return;
+    }
+
     clientErrors.value = validate();
 
     if (Object.keys(clientErrors.value).length > 0) {

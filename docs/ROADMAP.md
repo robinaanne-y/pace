@@ -393,6 +393,8 @@ Before considering the project finished, go through every UI state.
 | Delete success | "Project deleted successfully." |
 | Network failure | A visible error; the application never fails silently |
 
+- [x] Every state above checked in a browser, including on a slow connection and with the connection dropped mid-action
+
 ---
 
 ## Phase 14 — Testing
