@@ -4,7 +4,7 @@ Pace is a client project tracker for a digital agency. Project managers use it t
 
 This document describes how the application is put together. The order of work is in [ROADMAP.md](ROADMAP.md).
 
-**Status:** the core application is built: the database, model, REST API and API tests, and the Vue screens to list, view, create, edit and delete projects. Search, filtering, sorting and frontend tests are planned.
+**Status:** the application is built: the database, model, REST API and API tests, and the Vue screens to list, search, filter, sort, view, create, edit and delete projects. Automated frontend tests are planned.
 
 ## Overview
 
@@ -179,10 +179,12 @@ The frontend is a Vue 3 single-page app in `resources/js`, mounted in a Blade vi
 | --- | --- | --- |
 | `/projects` | Project list with summary cards, search, filters and sorting | `GET /api/projects` |
 | `/projects/create` | Create form | `POST /api/projects` |
-| `/projects/:id` | Project details | `GET /api/projects/{id}` |
+| `/projects/:id` | Project details, shown as a side panel over the list | `GET /api/projects/{id}` |
 | `/projects/:id/edit` | Edit form | `GET` then `PUT /api/projects/{id}` |
 
-Delete is a confirmation modal opened from a list row or from the details screen; it calls `DELETE /api/projects/{id}`. From the list the row is removed in place; from the details screen the user returns to the list.
+Delete is a confirmation modal opened from a list row or from the details panel; it calls `DELETE /api/projects/{id}` and removes the row in place.
+
+The details panel is a child route of the list. The list stays mounted underneath it, so opening and closing a project keeps the scroll position, search and filters, while the URL still identifies the project and the browser's Back button closes the panel.
 
 ### Structure
 
@@ -195,13 +197,14 @@ resources/js/
 ├── api/projects.js    One function per endpoint
 ├── constants.js       Status and priority values with their labels
 ├── format.js          Date formatting
+├── projectFilters.js  Search, filter and sort logic for the project list
 ├── composables/       useToast (show a notification from any page), useProject (load one project)
 ├── pages/             ProjectList, ProjectCreate, ProjectEdit, ProjectDetails, NotFound
 └── components/        AppLayout, AppSidebar, AppToast, AppIcon, PageHeader,
-                       BaseButton, BaseInput, BaseSelect, BaseModal,
+                       BaseButton, BaseInput, BaseSelect, BaseModal, BaseDrawer,
                        StatusBadge, PriorityBadge, ProjectForm, ProjectSummary,
                        ProjectTable, ProjectListSkeleton, ProjectLoadError,
-                       DeleteProjectModal
+                       DeleteProjectModal, ProjectToolbar, FilterDropdown
 ```
 
 Components prefixed `Base` are generic building blocks; those prefixed `App` exist once in the layout.

@@ -38,5 +38,5 @@ async function save(project) {
         Back to projects
     </RouterLink>
     <PageHeader title="New project" description="Add a client project to the workspace." />
-    <ProjectForm submit-label="Create Project" :cancel-to="{ name: 'projects.index' }" :server-errors="serverErrors" :is-submitting="isSubmitting" @submit="save" />
+    <ProjectForm submit-label="Create Project" :server-errors="serverErrors" :is-submitting="isSubmitting" @submit="save" @cancel="router.push({ name: 'projects.index' })" />
 </template>

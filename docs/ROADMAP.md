@@ -233,7 +233,7 @@ Build the visual foundation from the Figma design.
 | --- | --- |
 | `/projects` | Project list |
 | `/projects/create` | Create project |
-| `/projects/:id` | Project details |
+| `/projects/:id` | Project details (side panel over the list) |
 | `/projects/:id/edit` | Edit project |
 
 **Deliverable:** Navigation and application shell are working.
@@ -302,7 +302,7 @@ Build `/projects/:id/edit`.
 - [x] Update project
 - [x] Handle validation
 - [x] Success notification
-- [x] Redirect to project details
+- [x] Redirect to the project list
 
 One form component serves both screens. Avoid creating two nearly identical forms.
 
@@ -318,7 +318,7 @@ ProjectForm.vue
 
 ## Phase 10 — Project Details
 
-Build `/projects/:id`.
+Build `/projects/:id` as a side panel that slides in over the project list, so the list keeps its scroll position, search and filters.
 
 - [x] Show all project fields
 - [x] Edit Project action
@@ -347,7 +347,7 @@ Description
 - [x] Confirmation modal
 - [x] Call `DELETE /api/projects/{id}`
 - [x] Success toast
-- [x] Remove the row from the list, or redirect to the list from the details screen
+- [x] Remove the row from the list and close the details panel
 
 ```
 Delete
@@ -369,10 +369,10 @@ Do not delete immediately when the user clicks Delete.
 
 Only start this phase when the core CRUD workflow is stable. Implement in this order:
 
-- [ ] **12.1 Search** — client name, project name, description
-- [ ] **12.2 Status filter** — All, Planning, In Progress, On Hold, Completed
-- [ ] **12.3 Priority filter** — All, Low, Medium, High
-- [ ] **12.4 Sorting** — due date, start date, project name, priority
+- [x] **12.1 Search** — client name, project name, description
+- [x] **12.2 Status filter** — All, Planning, In Progress, On Hold, Completed
+- [x] **12.3 Priority filter** — All, Low, Medium, High
+- [x] **12.4 Sorting** — newest (default), due date, start date, project name, priority
 
 These features fit into the project list and do not require an architectural change.
 
