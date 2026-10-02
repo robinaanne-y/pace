@@ -137,8 +137,8 @@ Create the `projects` table with the fields listed in Phase 0.1.
 - [x] Add status and priority enums
 - [x] Run migrations
 - [x] Create factory
-- [x] Create seeder (random data from the factory)
-- [ ] Seed the realistic data in [test_data.json](test_data.json)
+- [x] Create seeder
+- [x] Seed the realistic data in [test_data.json](test_data.json) (`php artisan db:seed`)
 
 **Deliverable:** Database can be populated with realistic projects.
 
