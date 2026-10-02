@@ -36,7 +36,7 @@ Pace is one Laravel application. Laravel serves the REST API under `/api` and se
 | Styling | Tailwind CSS v4 | Design tokens and component classes exported from Figma |
 | Build | Vite 8 | Bundles CSS, JS and the Inter font |
 | Database | MySQL 8 | Tests use in-memory SQLite |
-| Tests | PHPUnit 12 | Feature tests for the API |
+| Tests | PHPUnit 12, Vitest 4, Vue Test Utils | Feature tests for the API; component and page tests for the frontend |
 
 The code uses Eloquent and has no driver-specific SQL, so the same migrations and queries run on MySQL in development and SQLite in tests.
 
@@ -233,7 +233,7 @@ Component classes sit in Tailwind's `components` layer, so a utility class on an
 | Layer | Tool | Coverage |
 | --- | --- | --- |
 | API | PHPUnit feature tests | Every endpoint's success case, 404s, and every validation rule |
-| Frontend | Vitest (if time permits) | List rendering, form validation, create, edit, delete confirmation |
+| Frontend | Vitest, Vue Test Utils, jsdom | The list page (states, search, filters, sorting, pagination, delete), the create and edit pages, the form, the delete modal, the API client and the list-filtering logic |
 | Manual | Browser | The end-to-end checklist in ROADMAP Phase 17 |
 
 API tests send real HTTP requests through the framework against an in-memory SQLite database, and assert the response, the status code and the stored data. Run them with:
@@ -241,6 +241,8 @@ API tests send real HTTP requests through the framework against an in-memory SQL
 ```
 php artisan test
 ```
+
+Frontend tests live in `tests/js`, mirroring the structure of `resources/js`, and run with `npm test`. They mount the real components in jsdom and replace the API module with fakes, so they run without a server or database. A small setup file adds stand-ins for the browser's dialog methods, which jsdom lacks. Their configuration is in `vitest.config.js`, separate from `vite.config.js`.
 
 ## Out of scope
 

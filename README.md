@@ -14,7 +14,7 @@ Pace is a client project tracker for a digital agency. Project managers use it t
 | Frontend | Vue 3 and Vue Router, built by Vite |
 | Styling | Tailwind CSS v4 with component classes exported from the Figma design |
 | Database | MySQL 8 |
-| Tests | PHPUnit |
+| Tests | PHPUnit (backend), Vitest and Vue Test Utils (frontend) |
 
 Pace is a single Laravel application: Laravel serves the REST API under `/api` and serves the Vue app for every other URL. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for how it fits together and [docs/ROADMAP.md](docs/ROADMAP.md) for the build plan.
 
@@ -164,10 +164,25 @@ A project that does not exist returns `404` with `{ "message": "Project not foun
 
 ## Testing
 
+### Backend
+
 ```sh
 php artisan test
 ```
 
-The tests cover every API endpoint, every validation rule, the sample-data seeder and the page routes. They run against an in-memory SQLite database, so they need no MySQL server and do not touch your data.
+The tests cover every API endpoint, every validation rule, the sample-data seeder, the page routes and the shape of error responses. They run against an in-memory SQLite database, so they need no MySQL server and do not touch your data.
 
-There are no automated frontend tests yet.
+### Frontend
+
+```sh
+npm test
+```
+
+The tests run in a simulated browser (jsdom), with the API replaced by fakes, so they need no server or database. They cover:
+
+- the project list: loading, empty and error states, search, filters, sorting, pagination and deleting
+- the create and edit forms: validation, server error messages, saving and cancelling
+- the delete confirmation, the badges, the pagination and filter controls, and notifications
+- the API client's handling of success, validation errors, server errors and a dropped connection
+
+`npm run test:watch` re-runs the tests as you edit. The tests cannot show how the pages look or how the side panel slides, so check those in a browser.
