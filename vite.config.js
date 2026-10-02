@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import { google } from 'laravel-vite-plugin/fonts';
 import tailwindcss from '@tailwindcss/vite';
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
     plugins: [
@@ -13,6 +14,14 @@ export default defineConfig({
                     weights: [400, 450, 500, 550, 600, 650, 700],
                 }),
             ],
+        }),
+        vue({
+            template: {
+                transformAssetUrls: {
+                    base: null,
+                    includeAbsolute: false,
+                },
+            },
         }),
         tailwindcss(),
     ],
