@@ -1,0 +1,56 @@
+<?php
+
+namespace App\Http\Requests;
+
+use App\Enums\ProjectPriority;
+use App\Enums\ProjectStatus;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class ProjectRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'client_name' => ['required', 'string', 'max:255'],
+            'project_name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'status' => ['required', Rule::enum(ProjectStatus::class)],
+            'priority' => ['required', Rule::enum(ProjectPriority::class)],
+            'start_date' => ['nullable', 'date_format:Y-m-d'],
+            'due_date' => [
+                'nullable',
+                'date_format:Y-m-d',
+                Rule::when($this->filled('start_date'), ['after_or_equal:start_date']),
+            ],
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'status.enum' => 'The status must be one of: '.implode(', ', array_column(ProjectStatus::cases(), 'value')).'.',
+            'priority.enum' => 'The priority must be one of: '.implode(', ', array_column(ProjectPriority::cases(), 'value')).'.',
+            'due_date.after_or_equal' => 'The due date cannot be earlier than the start date.',
+        ];
+    }
+}
