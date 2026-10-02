@@ -27,7 +27,7 @@ Core functionality:
 - [x] List projects
 - [ ] View project
 - [x] Create project
-- [ ] Edit project
+- [x] Edit project
 - [ ] Delete project
 - [x] Form validation
 - [x] API validation and error responses
@@ -296,13 +296,13 @@ Build `/projects/create`.
 
 Build `/projects/:id/edit`.
 
-- [ ] Fetch project
-- [ ] Populate form
-- [ ] Reuse `ProjectForm`
-- [ ] Update project
-- [ ] Handle validation
-- [ ] Success notification
-- [ ] Redirect to project details or list
+- [x] Fetch project
+- [x] Populate form
+- [x] Reuse `ProjectForm`
+- [x] Update project
+- [x] Handle validation
+- [x] Success notification
+- [x] Redirect to project details
 
 One form component serves both screens. Avoid creating two nearly identical forms.
 
