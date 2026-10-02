@@ -75,6 +75,8 @@ DB_PASSWORD=
 
 To run without MySQL, set `DB_CONNECTION=sqlite`, set `DB_DATABASE` to the full path of an empty `.sqlite` file, and skip the `CREATE DATABASE` step.
 
+When deploying, set `APP_ENV=production` and `APP_DEBUG=false`. With debug on, error responses include file paths and stack traces, which is useful locally but must not be public.
+
 `VITE_API_BASE_URL` is the address the Vue app uses to reach the API. The default, `/api`, is correct when Laravel serves both.
 
 ## Running the application
@@ -111,7 +113,7 @@ The endpoints are under `/api/projects` rather than `/projects`, so that `/proje
 | --- | --- |
 | `client_name` | Required, up to 255 characters |
 | `project_name` | Required, up to 255 characters |
-| `description` | Optional |
+| `description` | Optional, up to 5000 characters |
 | `status` | Required: `planning`, `in_progress`, `on_hold` or `completed` |
 | `priority` | Required: `low`, `medium` or `high` |
 | `start_date` | Optional, `YYYY-MM-DD` |

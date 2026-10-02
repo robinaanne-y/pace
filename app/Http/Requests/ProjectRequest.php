@@ -28,7 +28,7 @@ class ProjectRequest extends FormRequest
         return [
             'client_name' => ['required', 'string', 'max:255'],
             'project_name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
+            'description' => ['nullable', 'string', 'max:5000'],
             'status' => ['required', Rule::enum(ProjectStatus::class)],
             'priority' => ['required', Rule::enum(ProjectPriority::class)],
             'start_date' => ['nullable', 'date_format:Y-m-d'],

@@ -428,16 +428,22 @@ If time permits:
 
 Final review:
 
-- [ ] Mass assignment protection
-- [ ] Server-side validation
-- [ ] Proper HTTP status codes
-- [ ] Consistent API responses
-- [ ] No sensitive information in Git
-- [ ] `.env` excluded
-- [ ] Proper error handling
-- [ ] SQL injection protection through Eloquent / the query builder
-- [ ] No unnecessary dependencies
-- [ ] No duplicated form logic
+- [x] Mass assignment protection
+- [x] Server-side validation (description is now capped at 5000 characters)
+- [x] Proper HTTP status codes
+- [x] Consistent API responses
+- [x] No sensitive information in Git
+- [x] `.env` excluded
+- [x] Proper error handling
+- [x] SQL injection protection through Eloquent / the query builder (non-numeric ids are now rejected by the route)
+- [x] No unnecessary dependencies (reviewed; none removed, see the notes below)
+- [x] No duplicated form logic
+
+Review notes:
+
+- Two issues were found and fixed: a 1,000,000-character description caused a 500 error with a stack trace, and `/api/projects/1abc` returned project 1 on MySQL.
+- Possible follow-ups, not done: rate limiting on the API, security headers, and removing `concurrently` from `package.json` if nothing uses it. Dependencies are not changed without approval.
+- The create and edit pages each have a short save handler (call the API, show errors or a toast). The form itself, its fields and its validation exist once, in `ProjectForm`.
 
 The backend must not trust frontend validation. Vue validation improves the experience, but Laravel remains the source of truth.
 

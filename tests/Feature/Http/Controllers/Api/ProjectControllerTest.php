@@ -104,6 +104,48 @@ class ProjectControllerTest extends TestCase
         $this->assertDatabaseCount('projects', 1);
     }
 
+    public function test_store_ignores_id_and_timestamps_sent_by_the_client(): void
+    {
+        $response = $this->postJson('/api/projects', $this->validPayload([
+            'id' => 99999,
+            'created_at' => '2001-01-01 00:00:00',
+            'is_admin' => true,
+        ]));
+
+        $response->assertCreated()->assertJsonMissingPath('data.is_admin');
+        $this->assertDatabaseMissing('projects', ['id' => 99999]);
+        $this->assertDatabaseMissing('projects', ['created_at' => '2001-01-01 00:00:00']);
+    }
+
+    public function test_update_ignores_id_and_created_at_sent_by_the_client(): void
+    {
+        $project = Project::factory()->create();
+
+        $response = $this->putJson("/api/projects/{$project->id}", $this->validPayload(['id' => 99999, 'created_at' => '2001-01-01 00:00:00']));
+
+        $response->assertOk()->assertJsonPath('data.id', $project->id);
+        $this->assertDatabaseMissing('projects', ['id' => 99999]);
+        $this->assertDatabaseMissing('projects', ['created_at' => '2001-01-01 00:00:00']);
+    }
+
+    public function test_store_returns_422_when_description_is_longer_than_5000_characters(): void
+    {
+        $response = $this->postJson('/api/projects', $this->validPayload(['description' => str_repeat('x', 5001)]));
+
+        $response->assertUnprocessable()->assertJsonValidationErrors([
+            'description' => 'The description field must not be greater than 5000 characters.',
+        ]);
+        $this->assertDatabaseEmpty('projects');
+    }
+
+    public function test_store_accepts_a_description_of_exactly_5000_characters(): void
+    {
+        $response = $this->postJson('/api/projects', $this->validPayload(['description' => str_repeat('x', 5000)]));
+
+        $response->assertCreated();
+        $this->assertDatabaseCount('projects', 1);
+    }
+
     public function test_store_returns_422_when_required_fields_are_missing(): void
     {
         $response = $this->postJson('/api/projects', []);

@@ -155,7 +155,7 @@ A request passes through four small pieces, each with one job:
 | --- | --- |
 | `client_name` | Required, text, at most 255 characters |
 | `project_name` | Required, text, at most 255 characters |
-| `description` | Optional text |
+| `description` | Optional text, at most 5000 characters |
 | `status` | Required, must be a valid status value |
 | `priority` | Required, must be a valid priority value |
 | `start_date` | Optional, `YYYY-MM-DD` |
@@ -165,9 +165,11 @@ The server is the source of truth for validation. The Vue form will repeat the s
 
 ### Safety
 
-- Only the seven editable fields are mass-assignable on the model, and the controller passes only validated input.
-- All queries go through Eloquent, which uses bound parameters.
-- `.env` and the local database file are excluded from Git.
+- Only the seven editable fields are mass-assignable on the model, and the controller passes only validated input. An `id`, `created_at` or any other field sent by a client is ignored.
+- All queries go through Eloquent, which uses bound parameters. The project id in the URL must be numeric; the route rejects anything else with a 404 before the database is queried, because MySQL would otherwise read an id such as `1abc` as `1`.
+- The frontend shows project text through Vue's text interpolation, so markup stored in a project is displayed as text and never run.
+- With `APP_DEBUG=false`, every API error is a JSON object with only a `message`; no stack trace, file path or exception name is exposed.
+- `.env` and the local database file are excluded from Git, and `.env.example` contains no secrets.
 
 ## Frontend design
 
