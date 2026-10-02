@@ -19,6 +19,15 @@ const { project, isLoading, isNotFound, loadError, load } = useProject(props.id)
 const serverErrors = ref({});
 const isSubmitting = ref(false);
 
+// Returns to wherever the edit was opened from: the list or the project's details panel.
+function goBack() {
+    if (window.history.state?.back) {
+        router.back();
+    } else {
+        router.push({ name: 'projects.index' });
+    }
+}
+
 async function save(changes) {
     isSubmitting.value = true;
     serverErrors.value = {};
@@ -26,7 +35,7 @@ async function save(changes) {
     try {
         await updateProject(props.id, changes);
         toast.success('Project updated successfully.');
-        router.push({ name: 'projects.show', params: { id: props.id } });
+        router.push({ name: 'projects.index' });
     } catch (error) {
         if (error.status === 422) {
             serverErrors.value = error.errors;
@@ -40,10 +49,10 @@ async function save(changes) {
 </script>
 
 <template>
-    <RouterLink :to="{ name: 'projects.show', params: { id } }" class="back-link">
+    <button type="button" class="back-link" @click="goBack">
         <AppIcon name="arrow-left" :size="14" />
-        Back to project
-    </RouterLink>
+        Back
+    </button>
     <PageHeader title="Edit project" :description="project ? project.project_name : ''" />
 
     <div v-if="isLoading" class="surface project-form" role="status" aria-label="Loading project">
@@ -61,9 +70,9 @@ async function save(changes) {
         v-else
         :project="project"
         submit-label="Save Changes"
-        :cancel-to="{ name: 'projects.show', params: { id } }"
         :server-errors="serverErrors"
         :is-submitting="isSubmitting"
         @submit="save"
+        @cancel="goBack"
     />
 </template>

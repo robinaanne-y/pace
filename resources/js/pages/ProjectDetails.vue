@@ -3,8 +3,8 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import AppIcon from '../components/AppIcon.vue';
 import BaseButton from '../components/BaseButton.vue';
+import BaseDrawer from '../components/BaseDrawer.vue';
 import DeleteProjectModal from '../components/DeleteProjectModal.vue';
-import PageHeader from '../components/PageHeader.vue';
 import PriorityBadge from '../components/PriorityBadge.vue';
 import ProjectLoadError from '../components/ProjectLoadError.vue';
 import StatusBadge from '../components/StatusBadge.vue';
@@ -15,43 +15,39 @@ const props = defineProps({
     id: { type: String, required: true },
 });
 
+const emit = defineEmits(['deleted']);
+
 const router = useRouter();
 const { project, isLoading, isNotFound, loadError, load } = useProject(props.id);
 const isDeleteModalOpen = ref(false);
+
+function close() {
+    router.push({ name: 'projects.index' });
+}
+
+function closeAfterDelete() {
+    emit('deleted', project.value.id);
+    close();
+}
 </script>
 
 <template>
-    <RouterLink :to="{ name: 'projects.index' }" class="back-link">
-        <AppIcon name="arrow-left" :size="14" />
-        Back to projects
-    </RouterLink>
+    <BaseDrawer @close="close">
+        <template #header>
+            <h2>{{ project ? project.project_name : 'Project details' }}</h2>
+            <p v-if="project">{{ project.client_name }}</p>
+        </template>
 
-    <div v-if="isLoading" class="surface detail-card" role="status" aria-label="Loading project">
-        <div class="form-fields">
+        <div v-if="isLoading" class="form-fields" role="status" aria-label="Loading project">
             <span class="skeleton sk-title" />
             <span class="skeleton sk-description" />
             <span class="skeleton sk-search" />
             <span class="skeleton sk-search" />
         </div>
-    </div>
-    <ProjectLoadError v-else-if="loadError" :not-found="isNotFound" :message="loadError" @retry="load" />
-    <template v-else>
-        <PageHeader class="detail-heading" :title="project.project_name" :description="project.client_name">
-            <template #actions>
-                <div class="detail-actions">
-                    <BaseButton variant="secondary" :to="{ name: 'projects.edit', params: { id } }">
-                        <AppIcon name="pencil" :size="14" />
-                        Edit Project
-                    </BaseButton>
-                    <BaseButton variant="destructive" @click="isDeleteModalOpen = true">
-                        <AppIcon name="trash" :size="14" />
-                        Delete
-                    </BaseButton>
-                </div>
-            </template>
-        </PageHeader>
-
-        <div class="surface detail-card">
+        <div v-else-if="loadError" class="form-fields">
+            <ProjectLoadError :not-found="isNotFound" :message="loadError" @retry="load" />
+        </div>
+        <template v-else>
             <dl class="metadata">
                 <div>
                     <dt>Status</dt>
@@ -80,8 +76,19 @@ const isDeleteModalOpen = ref(false);
                 <h2>Description</h2>
                 <p>{{ project.description ?? 'No description provided.' }}</p>
             </div>
-        </div>
 
-        <DeleteProjectModal v-model:open="isDeleteModalOpen" :project="project" @deleted="router.push({ name: 'projects.index' })" />
-    </template>
+            <DeleteProjectModal v-model:open="isDeleteModalOpen" :project="project" @deleted="closeAfterDelete" />
+        </template>
+
+        <template v-if="project" #footer>
+            <BaseButton variant="secondary" :to="{ name: 'projects.edit', params: { id } }">
+                <AppIcon name="pencil" :size="14" />
+                Edit Project
+            </BaseButton>
+            <BaseButton variant="destructive" @click="isDeleteModalOpen = true">
+                <AppIcon name="trash" :size="14" />
+                Delete
+            </BaseButton>
+        </template>
+    </BaseDrawer>
 </template>

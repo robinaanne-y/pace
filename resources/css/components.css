@@ -186,8 +186,18 @@
 .modal-content p strong { color: var(--color-gray-700); font-weight: 500; }
 .modal-content .form-actions { padding: 24px 0 0; border-top: 0; }
 
+/* Side panel */
+.drawer { margin: 0 0 0 auto; padding: 0; width: min(480px, 100%); max-width: none; height: 100dvh; max-height: none; border-left: 1px solid var(--color-gray-200); background: white; color: var(--color-gray-700); box-shadow: 0 20px 80px #11182722; }
+.drawer[open] { display: flex; flex-direction: column; animation: drawer-in 180ms ease-out; }
+.drawer::backdrop { background: #11182755; backdrop-filter: blur(2px); }
+.drawer-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 24px 28px; border-bottom: 1px solid var(--color-gray-200); }
+.drawer-header h2 { font-size: 20px; line-height: 28px; font-weight: 600; letter-spacing: -.4px; color: var(--color-gray-900); }
+.drawer-header p { font-size: 13px; color: var(--color-gray-500); margin-top: 4px; }
+.drawer-body { flex: 1; overflow-y: auto; }
+@keyframes drawer-in { from { transform: translateX(100%); } }
+
 /* Toasts */
-.toast { position: fixed; bottom: 24px; right: 24px; z-index: 50; background: white; border: 1px solid var(--color-gray-200); box-shadow: 0 4px 24px #11182712; padding: 12px 12px 12px 16px; border-radius: 10px; display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.toast { position: fixed; top: auto; left: auto; bottom: 24px; right: 24px; width: auto; height: auto; z-index: 50; color: var(--color-gray-700); background: white; border: 1px solid var(--color-gray-200); box-shadow: 0 4px 24px #11182712; padding: 12px 12px 12px 16px; border-radius: 10px; display: flex; align-items: center; gap: 10px; font-size: 13px; }
 .toast-icon { color: var(--color-status-completed); background: #f0fdf4; width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; }
 .error-toast .toast-icon { background: #fef2f2; color: var(--color-danger); }
 
@@ -286,6 +296,7 @@
   .detail-actions .button { flex: 1; }
   .metadata { padding: 24px 20px; gap: 26px 16px; }
   .description-section { padding: 24px 20px; }
+  .drawer-header { padding: 20px; }
   .toast { bottom: 16px; right: 16px; left: 16px; font-size: 12px; justify-content: space-between; }
   .loading-panel { background: none; border: 0; box-shadow: none; }
   .loading-screen .toolbar { flex-direction: column; }
@@ -301,4 +312,4 @@
   .skeleton-row .sk-date { width: 40%; }
 }
 
-@media (prefers-reduced-motion: reduce) { .skeleton { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .skeleton, .drawer[open] { animation: none; } }

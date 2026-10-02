@@ -11,10 +11,9 @@ const props = defineProps({
     serverErrors: { type: Object, default: () => ({}) },
     isSubmitting: { type: Boolean, default: false },
     submitLabel: { type: String, required: true },
-    cancelTo: { type: [String, Object], required: true },
 });
 
-const emit = defineEmits(['submit']);
+const emit = defineEmits(['submit', 'cancel']);
 
 const form = useTemplateRef('form');
 const fields = reactive({
@@ -104,7 +103,7 @@ async function submit() {
         </div>
 
         <div class="form-actions">
-            <BaseButton variant="secondary" :to="cancelTo">Cancel</BaseButton>
+            <BaseButton variant="secondary" @click="$emit('cancel')">Cancel</BaseButton>
             <BaseButton type="submit" :disabled="isSubmitting">{{ isSubmitting ? 'Saving…' : submitLabel }}</BaseButton>
         </div>
     </form>
