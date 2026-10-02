@@ -25,10 +25,10 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for how the pieces fit together.
 Core functionality:
 
 - [x] List projects
-- [ ] View project
+- [x] View project
 - [x] Create project
 - [x] Edit project
-- [ ] Delete project
+- [x] Delete project
 - [x] Form validation
 - [x] API validation and error responses
 
@@ -320,9 +320,9 @@ ProjectForm.vue
 
 Build `/projects/:id`.
 
-- [ ] Show all project fields
-- [ ] Edit Project action
-- [ ] Delete action
+- [x] Show all project fields
+- [x] Edit Project action
+- [x] Delete action
 
 Layout:
 
@@ -344,10 +344,10 @@ Description
 
 ## Phase 11 — Delete
 
-- [ ] Confirmation modal
-- [ ] Call `DELETE /api/projects/{id}`
-- [ ] Success toast
-- [ ] Refresh the list or redirect
+- [x] Confirmation modal
+- [x] Call `DELETE /api/projects/{id}`
+- [x] Success toast
+- [x] Remove the row from the list, or redirect to the list from the details screen
 
 ```
 Delete
