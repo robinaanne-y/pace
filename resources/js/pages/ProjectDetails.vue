@@ -1,18 +1,23 @@
 <script setup>
+import AppIcon from '../components/AppIcon.vue';
+import BaseButton from '../components/BaseButton.vue';
+import PageHeader from '../components/PageHeader.vue';
+
 defineProps({
     id: { type: String, required: true },
 });
 </script>
 
 <template>
-    <RouterLink :to="{ name: 'projects.index' }" class="back-link">Back to projects</RouterLink>
-    <div class="page-heading detail-heading">
-        <div>
-            <h1>Project details</h1>
-            <p>Project #{{ id }}</p>
-        </div>
-        <div class="detail-actions">
-            <RouterLink :to="{ name: 'projects.edit', params: { id } }" class="button secondary">Edit Project</RouterLink>
-        </div>
-    </div>
+    <RouterLink :to="{ name: 'projects.index' }" class="back-link">
+        <AppIcon name="arrow-left" :size="14" />
+        Back to projects
+    </RouterLink>
+    <PageHeader class="detail-heading" title="Project details" :description="`Project #${id}`">
+        <template #actions>
+            <div class="detail-actions">
+                <BaseButton variant="secondary" :to="{ name: 'projects.edit', params: { id } }">Edit Project</BaseButton>
+            </div>
+        </template>
+    </PageHeader>
 </template>

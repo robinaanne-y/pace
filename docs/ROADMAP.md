@@ -216,16 +216,16 @@ Build the visual foundation from the Figma design.
 
 ### Components
 
-- [ ] AppLayout
-- [ ] Sidebar
-- [ ] PageHeader
-- [ ] Button
-- [ ] Input
-- [ ] Select
-- [ ] Modal
-- [ ] Toast
-- [ ] StatusBadge
-- [ ] PriorityBadge
+- [x] AppLayout
+- [x] Sidebar (`AppSidebar`)
+- [x] PageHeader
+- [x] Button (`BaseButton`)
+- [x] Input (`BaseInput`, also renders the textarea)
+- [x] Select (`BaseSelect`)
+- [x] Modal (`BaseModal`)
+- [x] Toast (`AppToast` with the `useToast` composable)
+- [x] StatusBadge
+- [x] PriorityBadge
 
 ### Routes
 

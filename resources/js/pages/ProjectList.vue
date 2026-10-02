@@ -1,10 +1,16 @@
+<script setup>
+import AppIcon from '../components/AppIcon.vue';
+import BaseButton from '../components/BaseButton.vue';
+import PageHeader from '../components/PageHeader.vue';
+</script>
+
 <template>
-    <div class="page-heading">
-        <div>
-            <p class="eyebrow">WORKSPACE</p>
-            <h1>Projects</h1>
-            <p>Manage and monitor all client projects.</p>
-        </div>
-        <RouterLink :to="{ name: 'projects.create' }" class="button primary">New Project</RouterLink>
-    </div>
+    <PageHeader eyebrow="WORKSPACE" title="Projects" description="Manage and monitor all client projects.">
+        <template #actions>
+            <BaseButton :to="{ name: 'projects.create' }">
+                <AppIcon name="plus" />
+                New Project
+            </BaseButton>
+        </template>
+    </PageHeader>
 </template>
