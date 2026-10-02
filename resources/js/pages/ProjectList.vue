@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue';
 import { listProjects } from '../api/projects';
 import AppIcon from '../components/AppIcon.vue';
 import BaseButton from '../components/BaseButton.vue';
+import DeleteProjectModal from '../components/DeleteProjectModal.vue';
 import PageHeader from '../components/PageHeader.vue';
 import ProjectListSkeleton from '../components/ProjectListSkeleton.vue';
 import ProjectSummary from '../components/ProjectSummary.vue';
@@ -11,6 +12,17 @@ import ProjectTable from '../components/ProjectTable.vue';
 const projects = ref([]);
 const isLoading = ref(true);
 const loadError = ref('');
+const projectToDelete = ref(null);
+const isDeleteModalOpen = ref(false);
+
+function confirmDelete(project) {
+    projectToDelete.value = project;
+    isDeleteModalOpen.value = true;
+}
+
+function removeDeletedProject() {
+    projects.value = projects.value.filter((project) => project.id !== projectToDelete.value.id);
+}
 
 async function loadProjects() {
     isLoading.value = true;
@@ -79,7 +91,9 @@ onMounted(loadProjects);
                     </BaseButton>
                 </div>
             </div>
-            <ProjectTable v-else :projects="projects" />
+            <ProjectTable v-else :projects="projects" @delete="confirmDelete" />
         </section>
+
+        <DeleteProjectModal v-if="projectToDelete" v-model:open="isDeleteModalOpen" :project="projectToDelete" @deleted="removeDeletedProject" />
     </template>
 </template>

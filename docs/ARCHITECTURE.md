@@ -4,7 +4,7 @@ Pace is a client project tracker for a digital agency. Project managers use it t
 
 This document describes how the application is put together. The order of work is in [ROADMAP.md](ROADMAP.md).
 
-**Status:** the database, model, REST API, API tests, the Vue application shell, and the project list, create and edit screens are built. The details and delete screens are planned; the frontend section below describes the intended design.
+**Status:** the core application is built: the database, model, REST API and API tests, and the Vue screens to list, view, create, edit and delete projects. Search, filtering, sorting and frontend tests are planned.
 
 ## Overview
 
@@ -182,7 +182,7 @@ The frontend is a Vue 3 single-page app in `resources/js`, mounted in a Blade vi
 | `/projects/:id` | Project details | `GET /api/projects/{id}` |
 | `/projects/:id/edit` | Edit form | `GET` then `PUT /api/projects/{id}` |
 
-Delete is a confirmation modal available from the list and the details screen; it calls `DELETE /api/projects/{id}`.
+Delete is a confirmation modal opened from a list row or from the details screen; it calls `DELETE /api/projects/{id}`. From the list the row is removed in place; from the details screen the user returns to the list.
 
 ### Structure
 
@@ -200,7 +200,8 @@ resources/js/
 └── components/        AppLayout, AppSidebar, AppToast, AppIcon, PageHeader,
                        BaseButton, BaseInput, BaseSelect, BaseModal,
                        StatusBadge, PriorityBadge, ProjectForm, ProjectSummary,
-                       ProjectTable, ProjectListSkeleton, ProjectLoadError
+                       ProjectTable, ProjectListSkeleton, ProjectLoadError,
+                       DeleteProjectModal
 ```
 
 Components prefixed `Base` are generic building blocks; those prefixed `App` exist once in the layout.

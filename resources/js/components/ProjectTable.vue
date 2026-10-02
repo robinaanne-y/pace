@@ -7,6 +7,8 @@ import StatusBadge from './StatusBadge.vue';
 defineProps({
     projects: { type: Array, required: true },
 });
+
+defineEmits(['delete']);
 </script>
 
 <template>
@@ -21,6 +23,7 @@ defineProps({
                         <th>PRIORITY</th>
                         <th>START DATE</th>
                         <th>DUE DATE</th>
+                        <th class="action-column"><span class="sr-only">Actions</span></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,6 +46,11 @@ defineProps({
                         <td><PriorityBadge :priority="project.priority" /></td>
                         <td class="date-cell">{{ formatDate(project.start_date) }}</td>
                         <td class="date-cell">{{ formatDate(project.due_date) }}</td>
+                        <td>
+                            <button type="button" class="icon-button" :aria-label="`Delete ${project.project_name}`" @click="$emit('delete', project)">
+                                <AppIcon name="trash" />
+                            </button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -57,6 +65,9 @@ defineProps({
                         </RouterLink>
                         <p>{{ project.client_name }}</p>
                     </div>
+                    <button type="button" class="icon-button" :aria-label="`Delete ${project.project_name}`" @click="$emit('delete', project)">
+                        <AppIcon name="trash" />
+                    </button>
                 </div>
                 <p v-if="project.description" class="mobile-description">{{ project.description }}</p>
                 <div class="mobile-badges">
