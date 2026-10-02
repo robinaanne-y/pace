@@ -1,15 +1,20 @@
 <script setup>
 import { formatDate } from '../format';
 import AppIcon from './AppIcon.vue';
+import BasePagination from './BasePagination.vue';
 import PriorityBadge from './PriorityBadge.vue';
 import StatusBadge from './StatusBadge.vue';
 
 defineProps({
     projects: { type: Array, required: true },
     total: { type: Number, required: true },
+    firstPosition: { type: Number, required: true },
+    pageCount: { type: Number, required: true },
 });
 
 defineEmits(['delete']);
+
+const page = defineModel('page', { type: Number, required: true });
 </script>
 
 <template>
@@ -99,7 +104,8 @@ defineEmits(['delete']);
 
     <div class="table-footer">
         <span>
-            Showing <strong>{{ projects.length }}</strong> of {{ total }} {{ total === 1 ? 'project' : 'projects' }}
+            Showing <strong>{{ firstPosition }}–{{ firstPosition + projects.length - 1 }}</strong> of {{ total }} {{ total === 1 ? 'project' : 'projects' }}
         </span>
+        <BasePagination v-if="pageCount > 1" v-model:page="page" :page-count="pageCount" />
     </div>
 </template>

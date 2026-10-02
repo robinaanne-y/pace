@@ -214,7 +214,7 @@ Components prefixed `Base` are generic building blocks; those prefixed `App` exi
 - **One form component.** `ProjectForm` is used by both the create and edit screens, so field layout and validation exist once.
 - **One API module.** Components never call `fetch` directly. `api/projects.js` is the only place that knows URLs and error formats.
 - **No state library.** Each page loads what it needs. The application has one resource and four screens, so a shared store would add code without solving a problem.
-- **Search, filtering and sorting in the browser.** The list endpoint returns every project, so the list screen filters and sorts that array. This keeps the API to the five required endpoints. If the number of projects grew large, these would move to query parameters on `GET /api/projects` with pagination.
+- **Search, filtering, sorting and pagination in the browser.** The list endpoint returns every project, so the list screen filters and sorts that array and shows it 10 projects per page. This keeps the API to the five required endpoints. If the number of projects grew large, these would move to query parameters on `GET /api/projects` with server-side pagination.
 - **Every state is visible.** Each screen has loading, empty and error states, and every create, update and delete shows a success or failure toast.
 
 ### Styling

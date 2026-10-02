@@ -117,6 +117,11 @@
 .table-footer { border-top: 1px solid var(--color-gray-200); min-height: 46px; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: var(--color-gray-500); }
 .table-footer strong { font-weight: 500; color: var(--color-gray-700); }
 .table-footer > span:last-child { display: flex; align-items: center; gap: 6px; }
+.pagination { display: flex; align-items: center; gap: 4px; padding: 8px 0; }
+.page-button { display: inline-flex; align-items: center; justify-content: center; min-width: 30px; height: 30px; padding: 0 6px; border-radius: 5px; font-size: 11px; font-variant-numeric: tabular-nums; color: var(--color-gray-700); }
+.page-button:hover:not(:disabled) { background: var(--color-gray-100); color: var(--color-gray-900); }
+.page-button.active { background: var(--color-primary-50); color: var(--color-primary-600); font-weight: 550; }
+.page-gap { min-width: 20px; text-align: center; color: var(--color-gray-500); }
 .footer-dot { height: 5px; width: 5px; border-radius: 50%; background: var(--color-status-completed); opacity: .7; }
 .page-footer { margin-top: 20px; display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--color-gray-500); }
 .page-footer svg { opacity: .7; }
@@ -279,7 +284,8 @@
   .mobile-dates span { display: flex; justify-content: space-between; }
   .mobile-dates strong { font-weight: 400; color: var(--color-gray-700); }
   .results-bar { margin-top: 10px; background: none; padding: 10px 2px; border: 0; font-size: 11px; }
-  .table-footer { padding: 16px 2px 0; border: 0; font-size: 9px; }
+  .table-footer { padding: 16px 2px 0; border: 0; font-size: 9px; flex-wrap: wrap; gap: 8px; }
+  .page-button { min-width: 36px; height: 36px; font-size: 12px; }
   .page-footer { margin-top: 24px; font-size: 9px; }
   .empty-state { margin-top: 16px; background: white; border: 1px solid var(--color-gray-200); border-radius: 10px; padding: 48px 20px; }
   .state-panel .empty-state { border: 0; background: none; margin: 0; min-height: 360px; padding: var(--space-32) var(--space-20); }

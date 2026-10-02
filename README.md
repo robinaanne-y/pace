@@ -27,6 +27,7 @@ Pace is a single Laravel application: Laravel serves the REST API under `/api` a
 - Search by client name, project name or description
 - Filter by status and by priority
 - Sort by newest, due date, start date, project name or priority
+- Pagination, 10 projects per page
 - Loading, empty and error states on every screen
 - Responsive layout for desktop, tablet and mobile
 
