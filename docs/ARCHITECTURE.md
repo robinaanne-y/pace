@@ -4,7 +4,7 @@ Pace is a client project tracker for a digital agency. Project managers use it t
 
 This document describes how the application is put together. The order of work is in [ROADMAP.md](ROADMAP.md).
 
-**Status:** the database, model, REST API, API tests and the Vue application shell (router, layout, API client) are built. The project screens are planned; the frontend section below describes the intended design.
+**Status:** the database, model, REST API, API tests and the Vue application shell (router, layout, shared components) are built. The project screens are planned; the frontend section below describes the intended design.
 
 ## Overview
 
@@ -193,10 +193,15 @@ resources/js/
 ├── router.js          Route table
 ├── api/client.js      Shared request helper; converts HTTP errors into a common shape
 ├── api/projects.js    One function per endpoint (planned)
-├── pages/             ProjectList, ProjectCreate, ProjectEdit, ProjectDetails
-└── components/        AppLayout, Sidebar, PageHeader, Button, Input, Select,
-                       Modal, Toast, StatusBadge, PriorityBadge, ProjectForm
+├── constants.js       Status and priority values with their labels
+├── composables/       useToast (show a success or error notification from any page)
+├── pages/             ProjectList, ProjectCreate, ProjectEdit, ProjectDetails, NotFound
+└── components/        AppLayout, AppSidebar, AppToast, AppIcon, PageHeader,
+                       BaseButton, BaseInput, BaseSelect, BaseModal,
+                       StatusBadge, PriorityBadge, ProjectForm (planned)
 ```
+
+Components prefixed `Base` are generic building blocks; those prefixed `App` exist once in the layout.
 
 ### Design decisions
 
