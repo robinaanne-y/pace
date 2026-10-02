@@ -14,7 +14,7 @@ Pace is a client project tracker for a digital agency. Project managers use it t
 | Frontend | Vue 3 and Vue Router, built by Vite |
 | Styling | Tailwind CSS v4 with component classes exported from the Figma design |
 | Database | MySQL 8 |
-| Tests | PHPUnit |
+| Tests | PHPUnit (backend), Vitest and Vue Test Utils (frontend) |
 
 Pace is a single Laravel application: Laravel serves the REST API under `/api` and serves the Vue app for every other URL. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for how it fits together and [docs/ROADMAP.md](docs/ROADMAP.md) for the build plan.
 
@@ -27,6 +27,7 @@ Pace is a single Laravel application: Laravel serves the REST API under `/api` a
 - Search by client name, project name or description
 - Filter by status and by priority
 - Sort by newest, due date, start date, project name or priority
+- Pagination, 10 projects per page
 - Loading, empty and error states on every screen
 - Responsive layout for desktop, tablet and mobile
 
@@ -74,6 +75,8 @@ DB_PASSWORD=
 
 To run without MySQL, set `DB_CONNECTION=sqlite`, set `DB_DATABASE` to the full path of an empty `.sqlite` file, and skip the `CREATE DATABASE` step.
 
+When deploying, set `APP_ENV=production` and `APP_DEBUG=false`. With debug on, error responses include file paths and stack traces, which is useful locally but must not be public.
+
 `VITE_API_BASE_URL` is the address the Vue app uses to reach the API. The default, `/api`, is correct when Laravel serves both.
 
 ## Running the application
@@ -110,7 +113,7 @@ The endpoints are under `/api/projects` rather than `/projects`, so that `/proje
 | --- | --- |
 | `client_name` | Required, up to 255 characters |
 | `project_name` | Required, up to 255 characters |
-| `description` | Optional |
+| `description` | Optional, up to 5000 characters |
 | `status` | Required: `planning`, `in_progress`, `on_hold` or `completed` |
 | `priority` | Required: `low`, `medium` or `high` |
 | `start_date` | Optional, `YYYY-MM-DD` |
@@ -161,10 +164,25 @@ A project that does not exist returns `404` with `{ "message": "Project not foun
 
 ## Testing
 
+### Backend
+
 ```sh
 php artisan test
 ```
 
-The tests cover every API endpoint, every validation rule, the sample-data seeder and the page routes. They run against an in-memory SQLite database, so they need no MySQL server and do not touch your data.
+The tests cover every API endpoint, every validation rule, the sample-data seeder, the page routes and the shape of error responses. They run against an in-memory SQLite database, so they need no MySQL server and do not touch your data.
 
-There are no automated frontend tests yet.
+### Frontend
+
+```sh
+npm test
+```
+
+The tests run in a simulated browser (jsdom), with the API replaced by fakes, so they need no server or database. They cover:
+
+- the project list: loading, empty and error states, search, filters, sorting, pagination and deleting
+- the create and edit forms: validation, server error messages, saving and cancelling
+- the delete confirmation, the badges, the pagination and filter controls, and notifications
+- the API client's handling of success, validation errors, server errors and a dropped connection
+
+`npm run test:watch` re-runs the tests as you edit. The tests cannot show how the pages look or how the side panel slides, so check those in a browser.

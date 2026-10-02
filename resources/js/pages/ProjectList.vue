@@ -1,7 +1,7 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { listProjects } from '../api/projects';
-import { filterAndSortProjects, SORT_OPTIONS } from '../projectFilters';
+import { filterAndSortProjects, PAGE_SIZE, SORT_OPTIONS } from '../projectFilters';
 import AppIcon from '../components/AppIcon.vue';
 import BaseButton from '../components/BaseButton.vue';
 import DeleteProjectModal from '../components/DeleteProjectModal.vue';
@@ -20,12 +20,33 @@ const search = ref('');
 const status = ref('');
 const priority = ref('');
 const sort = ref('newest');
+const page = ref(1);
+const listSection = useTemplateRef('listSection');
 
 const visibleProjects = computed(() =>
     filterAndSortProjects(projects.value, { search: search.value, status: status.value, priority: priority.value, sort: sort.value }),
 );
+const pageCount = computed(() => Math.max(1, Math.ceil(visibleProjects.value.length / PAGE_SIZE)));
+const pagedProjects = computed(() => visibleProjects.value.slice((page.value - 1) * PAGE_SIZE, page.value * PAGE_SIZE));
 const isFiltered = computed(() => search.value.trim() !== '' || status.value !== '' || priority.value !== '');
 const sortLabel = computed(() => SORT_OPTIONS.find((option) => option.value === sort.value).label);
+
+watch([search, status, priority, sort], () => {
+    page.value = 1;
+});
+
+// Deleting the last project on the last page moves back to the page before it.
+watch(pageCount, () => {
+    page.value = Math.min(page.value, pageCount.value);
+});
+
+watch(page, async () => {
+    await nextTick();
+
+    if (listSection.value?.getBoundingClientRect().top < 0) {
+        listSection.value.scrollIntoView();
+    }
+});
 
 function clearFilters() {
     search.value = '';
@@ -87,7 +108,7 @@ onMounted(loadProjects);
     <template v-else>
         <ProjectSummary :projects="projects" />
 
-        <section>
+        <section ref="listSection">
             <div class="section-heading">
                 <h2>
                     All Projects
@@ -126,7 +147,15 @@ onMounted(loadProjects);
                     <p>Try a different search term or clear the filters.</p>
                     <BaseButton variant="secondary" @click="clearFilters">Clear filters</BaseButton>
                 </div>
-                <ProjectTable v-else :projects="visibleProjects" :total="projects.length" @delete="confirmDelete" />
+                <ProjectTable
+                    v-else
+                    v-model:page="page"
+                    :projects="pagedProjects"
+                    :total="visibleProjects.length"
+                    :first-position="(page - 1) * PAGE_SIZE + 1"
+                    :page-count="pageCount"
+                    @delete="confirmDelete"
+                />
             </div>
         </section>
 

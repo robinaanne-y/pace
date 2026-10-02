@@ -6,6 +6,8 @@ export const SORT_OPTIONS = [
     { value: 'priority', label: 'Priority' },
 ];
 
+export const PAGE_SIZE = 10;
+
 const PRIORITY_RANK = { high: 0, medium: 1, low: 2 };
 
 // Dates are ISO strings, so they sort alphabetically; projects without a date go last.

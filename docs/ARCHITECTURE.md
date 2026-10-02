@@ -36,7 +36,7 @@ Pace is one Laravel application. Laravel serves the REST API under `/api` and se
 | Styling | Tailwind CSS v4 | Design tokens and component classes exported from Figma |
 | Build | Vite 8 | Bundles CSS, JS and the Inter font |
 | Database | MySQL 8 | Tests use in-memory SQLite |
-| Tests | PHPUnit 12 | Feature tests for the API |
+| Tests | PHPUnit 12, Vitest 4, Vue Test Utils | Feature tests for the API; component and page tests for the frontend |
 
 The code uses Eloquent and has no driver-specific SQL, so the same migrations and queries run on MySQL in development and SQLite in tests.
 
@@ -155,7 +155,7 @@ A request passes through four small pieces, each with one job:
 | --- | --- |
 | `client_name` | Required, text, at most 255 characters |
 | `project_name` | Required, text, at most 255 characters |
-| `description` | Optional text |
+| `description` | Optional text, at most 5000 characters |
 | `status` | Required, must be a valid status value |
 | `priority` | Required, must be a valid priority value |
 | `start_date` | Optional, `YYYY-MM-DD` |
@@ -165,9 +165,11 @@ The server is the source of truth for validation. The Vue form will repeat the s
 
 ### Safety
 
-- Only the seven editable fields are mass-assignable on the model, and the controller passes only validated input.
-- All queries go through Eloquent, which uses bound parameters.
-- `.env` and the local database file are excluded from Git.
+- Only the seven editable fields are mass-assignable on the model, and the controller passes only validated input. An `id`, `created_at` or any other field sent by a client is ignored.
+- All queries go through Eloquent, which uses bound parameters. The project id in the URL must be numeric; the route rejects anything else with a 404 before the database is queried, because MySQL would otherwise read an id such as `1abc` as `1`.
+- The frontend shows project text through Vue's text interpolation, so markup stored in a project is displayed as text and never run.
+- With `APP_DEBUG=false`, every API error is a JSON object with only a `message`; no stack trace, file path or exception name is exposed.
+- `.env` and the local database file are excluded from Git, and `.env.example` contains no secrets.
 
 ## Frontend design
 
@@ -214,7 +216,7 @@ Components prefixed `Base` are generic building blocks; those prefixed `App` exi
 - **One form component.** `ProjectForm` is used by both the create and edit screens, so field layout and validation exist once.
 - **One API module.** Components never call `fetch` directly. `api/projects.js` is the only place that knows URLs and error formats.
 - **No state library.** Each page loads what it needs. The application has one resource and four screens, so a shared store would add code without solving a problem.
-- **Search, filtering and sorting in the browser.** The list endpoint returns every project, so the list screen filters and sorts that array. This keeps the API to the five required endpoints. If the number of projects grew large, these would move to query parameters on `GET /api/projects` with pagination.
+- **Search, filtering, sorting and pagination in the browser.** The list endpoint returns every project, so the list screen filters and sorts that array and shows it 10 projects per page. This keeps the API to the five required endpoints. If the number of projects grew large, these would move to query parameters on `GET /api/projects` with server-side pagination.
 - **Every state is visible.** Each screen has loading, empty and error states, and every create, update and delete shows a success or failure toast.
 
 ### Styling
@@ -231,7 +233,7 @@ Component classes sit in Tailwind's `components` layer, so a utility class on an
 | Layer | Tool | Coverage |
 | --- | --- | --- |
 | API | PHPUnit feature tests | Every endpoint's success case, 404s, and every validation rule |
-| Frontend | Vitest (if time permits) | List rendering, form validation, create, edit, delete confirmation |
+| Frontend | Vitest, Vue Test Utils, jsdom | The list page (states, search, filters, sorting, pagination, delete), the create and edit pages, the form, the delete modal, the API client and the list-filtering logic |
 | Manual | Browser | The end-to-end checklist in ROADMAP Phase 17 |
 
 API tests send real HTTP requests through the framework against an in-memory SQLite database, and assert the response, the status code and the stored data. Run them with:
@@ -239,6 +241,8 @@ API tests send real HTTP requests through the framework against an in-memory SQL
 ```
 php artisan test
 ```
+
+Frontend tests live in `tests/js`, mirroring the structure of `resources/js`, and run with `npm test`. They mount the real components in jsdom and replace the API module with fakes, so they run without a server or database. A small setup file adds stand-ins for the browser's dialog methods, which jsdom lacks. Their configuration is in `vitest.config.js`, separate from `vite.config.js`.
 
 ## Out of scope
 

@@ -58,6 +58,10 @@ function validate() {
 }
 
 async function submit() {
+    if (props.isSubmitting) {
+        return;
+    }
+
     clientErrors.value = validate();
 
     if (Object.keys(clientErrors.value).length > 0) {
@@ -91,7 +95,7 @@ async function submit() {
                 <BaseInput v-model="fields.project_name" label="Project name" required maxlength="255" placeholder="e.g. Website redesign" :error="errors.project_name" />
                 <BaseInput v-model="fields.client_name" label="Client name" required maxlength="255" placeholder="e.g. Acme Corporation" :error="errors.client_name" />
             </div>
-            <BaseInput v-model="fields.description" label="Description" optional multiline placeholder="What is this project about?" :error="errors.description" />
+            <BaseInput v-model="fields.description" label="Description" optional multiline maxlength="5000" placeholder="What is this project about?" :error="errors.description" />
             <div class="field-grid">
                 <BaseSelect v-model="fields.status" label="Status" required :options="STATUS_OPTIONS" :error="errors.status" />
                 <BaseSelect v-model="fields.priority" label="Priority" required :options="PRIORITY_OPTIONS" :error="errors.priority" />

@@ -14,7 +14,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for how the pieces fit together.
 | Database | MySQL |
 | API | REST, JSON |
 | Authentication | Optional, not planned for the MVP |
-| Testing | PHPUnit for the API; Vue tests if time permits |
+| Testing | PHPUnit for the API; Vitest and Vue Test Utils for the frontend |
 
 ---
 
@@ -393,6 +393,8 @@ Before considering the project finished, go through every UI state.
 | Delete success | "Project deleted successfully." |
 | Network failure | A visible error; the application never fails silently |
 
+- [x] Every state above checked in a browser, including on a slow connection and with the connection dropped mid-action
+
 ---
 
 ## Phase 14 — Testing
@@ -412,13 +414,17 @@ Before considering the project finished, go through every UI state.
 
 ### Frontend
 
-If time permits:
+Vitest, Vue Test Utils and jsdom; run with `npm test`.
 
-- [ ] Project list rendering
-- [ ] Form validation
-- [ ] Create submission
-- [ ] Edit submission
-- [ ] Delete confirmation
+- [x] Project list rendering
+- [x] Form validation
+- [x] Create submission
+- [x] Edit submission
+- [x] Delete confirmation
+- [x] Search, filters, sorting and pagination
+- [x] API client error handling
+
+The tests were checked by deliberately breaking the application code in 13 ways (a skipped validation, a wrong redirect, a reversed sort, a leaked server message and others); every one made at least one test fail.
 
 ---
 
@@ -426,16 +432,22 @@ If time permits:
 
 Final review:
 
-- [ ] Mass assignment protection
-- [ ] Server-side validation
-- [ ] Proper HTTP status codes
-- [ ] Consistent API responses
-- [ ] No sensitive information in Git
-- [ ] `.env` excluded
-- [ ] Proper error handling
-- [ ] SQL injection protection through Eloquent / the query builder
-- [ ] No unnecessary dependencies
-- [ ] No duplicated form logic
+- [x] Mass assignment protection
+- [x] Server-side validation (description is now capped at 5000 characters)
+- [x] Proper HTTP status codes
+- [x] Consistent API responses
+- [x] No sensitive information in Git
+- [x] `.env` excluded
+- [x] Proper error handling
+- [x] SQL injection protection through Eloquent / the query builder (non-numeric ids are now rejected by the route)
+- [x] No unnecessary dependencies (reviewed; none removed, see the notes below)
+- [x] No duplicated form logic
+
+Review notes:
+
+- Two issues were found and fixed: a 1,000,000-character description caused a 500 error with a stack trace, and `/api/projects/1abc` returned project 1 on MySQL.
+- Possible follow-ups, not done: rate limiting on the API, security headers, and removing `concurrently` from `package.json` if nothing uses it. Dependencies are not changed without approval.
+- The create and edit pages each have a short save handler (call the API, show errors or a toast). The form itself, its fields and its validation exist once, in `ProjectForm`.
 
 The backend must not trust frontend validation. Vue validation improves the experience, but Laravel remains the source of truth.
 
